@@ -1,0 +1,24 @@
+{
+  "name": "cardano-wallet",
+  "collaborators": [
+    "Nicolas Di Prima <nicolas.diprima@iohk.io>"
+  ],
+  "description": "Cardano Wallet, from rust to JS via Wasm",
+  "version": "0.2.4",
+  "license": "MIT OR Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/input-output-hk/js-cardano-wasm"
+  },
+  "files": [
+    "cardano_wallet_bg.wasm",
+    "cardano_wallet.js",
+    "cardano_wallet.d.ts",
+    "LICENSE_MIT",
+    "LICENSE_APACHE"
+  ],
+  "module": "cardano_wallet.js",
+  "homepage": "https://github.com/input-output-hk/js-cardano-wasm#README.md",
+  "types": "cardano_wallet.d.ts",
+  "sideEffects": "false"
+}
