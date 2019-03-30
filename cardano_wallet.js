@@ -382,6 +382,12 @@ export class Bip44AccountPrivate {
         index.ptr = 0;
         return PrivateKey.__wrap(wasm.bip44accountprivate_address_key(this.ptr, internal, ptr1));
     }
+    /**
+    * @returns {PrivateKey}
+    */
+    key() {
+        return PrivateKey.__wrap(wasm.bip44accountprivate_key(this.ptr));
+    }
 }
 
 function freeBip44AccountPublic(ptr) {
@@ -426,6 +432,12 @@ export class Bip44AccountPublic {
         const ptr1 = index.ptr;
         index.ptr = 0;
         return PublicKey.__wrap(wasm.bip44accountpublic_address_key(this.ptr, internal, ptr1));
+    }
+    /**
+    * @returns {PublicKey}
+    */
+    key() {
+        return PublicKey.__wrap(wasm.bip44accountpublic_key(this.ptr));
     }
 }
 
@@ -494,6 +506,12 @@ export class Bip44RootPrivateKey {
         const ptr0 = index.ptr;
         index.ptr = 0;
         return Bip44AccountPrivate.__wrap(wasm.bip44rootprivatekey_bip44_account(this.ptr, ptr0));
+    }
+    /**
+    * @returns {PrivateKey}
+    */
+    key() {
+        return PrivateKey.__wrap(wasm.bip44rootprivatekey_key(this.ptr));
     }
 }
 

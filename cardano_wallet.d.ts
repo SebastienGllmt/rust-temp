@@ -59,6 +59,7 @@ export class Bip44AccountPrivate {
   static new(key: PrivateKey, derivation_scheme: DerivationScheme): Bip44AccountPrivate;
   public(): Bip44AccountPublic;
   address_key(internal: boolean, index: AddressKeyIndex): PrivateKey;
+  key(): PrivateKey;
 }
 /**
 */
@@ -66,6 +67,7 @@ export class Bip44AccountPublic {
   free(): void;
   static new(key: PublicKey, derivation_scheme: DerivationScheme): Bip44AccountPublic;
   address_key(internal: boolean, index: AddressKeyIndex): PublicKey;
+  key(): PublicKey;
 }
 /**
 * Root Private Key of a BIP44 HD Wallet
@@ -75,6 +77,7 @@ export class Bip44RootPrivateKey {
   static new(key: PrivateKey, derivation_scheme: DerivationScheme): Bip44RootPrivateKey;
   static recover(entropy: Entropy, password: string): Bip44RootPrivateKey;
   bip44_account(index: AccountIndex): Bip44AccountPrivate;
+  key(): PrivateKey;
 }
 /**
 * setting of the blockchain
