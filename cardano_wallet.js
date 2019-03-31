@@ -813,6 +813,15 @@ export class DaedalusWallet {
     }
 
     /**
+    * @param {PrivateKey} key
+    * @returns {DaedalusWallet}
+    */
+    static new(key) {
+        const ptr0 = key.ptr;
+        key.ptr = 0;
+        return DaedalusWallet.__wrap(wasm.daedaluswallet_new(ptr0));
+    }
+    /**
     * @param {Entropy} entropy
     * @returns {DaedalusWallet}
     */

@@ -49,6 +49,7 @@ export function bip44accountpublic_new(a: number, b: number): number;
 export function bip44accountpublic_address_key(a: number, b: number, c: number): number;
 export function bip44accountpublic_key(a: number): number;
 export function __wbg_daedaluswallet_free(a: number): void;
+export function daedaluswallet_new(a: number): number;
 export function daedaluswallet_recover(a: number): number;
 export function __wbg_daedalusaddresschecker_free(a: number): void;
 export function daedalusaddresschecker_new(a: number): number;

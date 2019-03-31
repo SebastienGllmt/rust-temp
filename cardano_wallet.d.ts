@@ -135,6 +135,7 @@ export class DaedalusCheckedAddress {
 */
 export class DaedalusWallet {
   free(): void;
+  static new(key: PrivateKey): DaedalusWallet;
   static recover(entropy: Entropy): DaedalusWallet;
 }
 /**
