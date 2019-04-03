@@ -1825,6 +1825,14 @@ export class TransactionFinalized {
         return wasm.transactionfinalized_sign(this.ptr, blockchain_settings.ptr, key.ptr);
     }
     /**
+    * @param {BlockchainSettings} blockchain_settings
+    * @param {PrivateRedeemKey} key
+    * @returns {void}
+    */
+    sign_redeemption(blockchain_settings, key) {
+        return wasm.transactionfinalized_sign_redeemption(this.ptr, blockchain_settings.ptr, key.ptr);
+    }
+    /**
     * @returns {SignedTransaction}
     */
     finalize() {

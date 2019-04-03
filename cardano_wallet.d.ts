@@ -313,6 +313,7 @@ export class TransactionFinalized {
   free(): void;
   constructor(transaction: Transaction);
   sign(blockchain_settings: BlockchainSettings, key: PrivateKey): void;
+  sign_redeemption(blockchain_settings: BlockchainSettings, key: PrivateRedeemKey): void;
   finalize(): SignedTransaction;
 }
 /**
