@@ -104,7 +104,7 @@ export function transactionbuilder_make_transaction(a: number): number;
 export function __wbg_transactionfinalized_free(a: number): void;
 export function transactionfinalized_new(a: number): number;
 export function transactionfinalized_sign(a: number, b: number, c: number): void;
-export function transactionfinalized_sign_redeemption(a: number, b: number, c: number): void;
+export function transactionfinalized_sign_redemption(a: number, b: number, c: number): void;
 export function transactionfinalized_finalize(a: number): number;
 export function __wbg_privateredeemkey_free(a: number): void;
 export function privateredeemkey_from_bytes(a: number, b: number): number;
