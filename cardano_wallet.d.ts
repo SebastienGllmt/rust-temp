@@ -171,6 +171,7 @@ export class Entropy {
   free(): void;
   static from_english_mnemonics(mnemonics: string): Entropy;
   to_english_mnemonics(): string;
+  to_array(): any;
 }
 /**
 * This is the linear fee algorithm used buy the current cardano blockchain.
@@ -273,7 +274,6 @@ export class SignedTransaction {
   id(): string;
   to_json(): any;
   to_hex(): string;
-  to_base58(): string;
 }
 /**
 * a transaction type, this is not ready for sending to the network. It is only an
@@ -289,7 +289,6 @@ export class Transaction {
   id(): string;
   to_json(): any;
   to_hex(): string;
-  to_base58(): string;
 }
 /**
 * The transaction builder provides a set of tools to help build

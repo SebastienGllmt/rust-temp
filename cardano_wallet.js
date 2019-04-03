@@ -942,6 +942,12 @@ export class Entropy {
         return realRet;
 
     }
+    /**
+    * @returns {any}
+    */
+    to_array() {
+        return takeObject(wasm.entropy_to_array(this.ptr));
+    }
 }
 
 function freeLinearFeeAlgorithm(ptr) {
@@ -1624,21 +1630,6 @@ export class SignedTransaction {
         return realRet;
 
     }
-    /**
-    * @returns {string}
-    */
-    to_base58() {
-        const retptr = globalArgumentPtr();
-        wasm.signedtransaction_to_base58(retptr, this.ptr);
-        const mem = getUint32Memory();
-        const rustptr = mem[retptr / 4];
-        const rustlen = mem[retptr / 4 + 1];
-
-        const realRet = getStringFromWasm(rustptr, rustlen).slice();
-        wasm.__wbindgen_free(rustptr, rustlen * 1);
-        return realRet;
-
-    }
 }
 
 function freeTransaction(ptr) {
@@ -1696,21 +1687,6 @@ export class Transaction {
     to_hex() {
         const retptr = globalArgumentPtr();
         wasm.transaction_to_hex(retptr, this.ptr);
-        const mem = getUint32Memory();
-        const rustptr = mem[retptr / 4];
-        const rustlen = mem[retptr / 4 + 1];
-
-        const realRet = getStringFromWasm(rustptr, rustlen).slice();
-        wasm.__wbindgen_free(rustptr, rustlen * 1);
-        return realRet;
-
-    }
-    /**
-    * @returns {string}
-    */
-    to_base58() {
-        const retptr = globalArgumentPtr();
-        wasm.transaction_to_base58(retptr, this.ptr);
         const mem = getUint32Memory();
         const rustptr = mem[retptr / 4];
         const rustlen = mem[retptr / 4 + 1];
