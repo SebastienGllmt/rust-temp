@@ -950,6 +950,114 @@ export class Entropy {
     }
 }
 
+function freeInputSelectionBuilder(ptr) {
+
+    wasm.__wbg_inputselectionbuilder_free(ptr);
+}
+/**
+*/
+export class InputSelectionBuilder {
+
+    static __wrap(ptr) {
+        const obj = Object.create(InputSelectionBuilder.prototype);
+        obj.ptr = ptr;
+
+        return obj;
+    }
+
+    free() {
+        const ptr = this.ptr;
+        this.ptr = 0;
+        freeInputSelectionBuilder(ptr);
+    }
+
+    /**
+    * @returns {InputSelectionBuilder}
+    */
+    static first_match_first() {
+        return InputSelectionBuilder.__wrap(wasm.inputselectionbuilder_first_match_first());
+    }
+    /**
+    * @returns {InputSelectionBuilder}
+    */
+    static largest_first() {
+        return InputSelectionBuilder.__wrap(wasm.inputselectionbuilder_largest_first());
+    }
+    /**
+    * @param {Coin} dust_threshold
+    * @returns {InputSelectionBuilder}
+    */
+    static blackjack(dust_threshold) {
+        const ptr0 = dust_threshold.ptr;
+        dust_threshold.ptr = 0;
+        return InputSelectionBuilder.__wrap(wasm.inputselectionbuilder_blackjack(ptr0));
+    }
+    /**
+    * @param {TxInput} tx_input
+    * @returns {void}
+    */
+    add_input(tx_input) {
+        return wasm.inputselectionbuilder_add_input(this.ptr, tx_input.ptr);
+    }
+    /**
+    * @param {TxOut} output
+    * @returns {void}
+    */
+    add_output(output) {
+        return wasm.inputselectionbuilder_add_output(this.ptr, output.ptr);
+    }
+    /**
+    * @param {LinearFeeAlgorithm} fee_algorithm
+    * @param {OutputPolicy} output_policy
+    * @returns {InputSelectionResult}
+    */
+    select_inputs(fee_algorithm, output_policy) {
+        return InputSelectionResult.__wrap(wasm.inputselectionbuilder_select_inputs(this.ptr, fee_algorithm.ptr, output_policy.ptr));
+    }
+}
+
+function freeInputSelectionResult(ptr) {
+
+    wasm.__wbg_inputselectionresult_free(ptr);
+}
+/**
+*/
+export class InputSelectionResult {
+
+    static __wrap(ptr) {
+        const obj = Object.create(InputSelectionResult.prototype);
+        obj.ptr = ptr;
+
+        return obj;
+    }
+
+    free() {
+        const ptr = this.ptr;
+        this.ptr = 0;
+        freeInputSelectionResult(ptr);
+    }
+
+    /**
+    * @param {TxoPointer} txo_pointer
+    * @returns {boolean}
+    */
+    is_input(txo_pointer) {
+        return (wasm.inputselectionresult_is_input(this.ptr, txo_pointer.ptr)) !== 0;
+    }
+    /**
+    * @returns {Coin}
+    */
+    estimated_fees() {
+        return Coin.__wrap(wasm.inputselectionresult_estimated_fees(this.ptr));
+    }
+    /**
+    * @returns {Coin}
+    */
+    estimated_change() {
+        return Coin.__wrap(wasm.inputselectionresult_estimated_change(this.ptr));
+    }
+}
+
 function freeLinearFeeAlgorithm(ptr) {
 
     wasm.__wbg_linearfeealgorithm_free(ptr);
@@ -1906,6 +2014,104 @@ export class TransactionId {
     }
 }
 
+function freeTransactionSignature(ptr) {
+
+    wasm.__wbg_transactionsignature_free(ptr);
+}
+/**
+*/
+export class TransactionSignature {
+
+    static __wrap(ptr) {
+        const obj = Object.create(TransactionSignature.prototype);
+        obj.ptr = ptr;
+
+        return obj;
+    }
+
+    free() {
+        const ptr = this.ptr;
+        this.ptr = 0;
+        freeTransactionSignature(ptr);
+    }
+
+    /**
+    * @param {string} hex
+    * @returns {TransactionSignature}
+    */
+    static from_hex(hex) {
+        const ptr0 = passStringToWasm(hex);
+        const len0 = WASM_VECTOR_LEN;
+        try {
+            return TransactionSignature.__wrap(wasm.transactionsignature_from_hex(ptr0, len0));
+
+        } finally {
+            wasm.__wbindgen_free(ptr0, len0 * 1);
+
+        }
+
+    }
+    /**
+    * @returns {string}
+    */
+    to_hex() {
+        const retptr = globalArgumentPtr();
+        wasm.transactionsignature_to_hex(retptr, this.ptr);
+        const mem = getUint32Memory();
+        const rustptr = mem[retptr / 4];
+        const rustlen = mem[retptr / 4 + 1];
+
+        const realRet = getStringFromWasm(rustptr, rustlen).slice();
+        wasm.__wbindgen_free(rustptr, rustlen * 1);
+        return realRet;
+
+    }
+}
+
+function freeTxInput(ptr) {
+
+    wasm.__wbg_txinput_free(ptr);
+}
+/**
+*/
+export class TxInput {
+
+    static __wrap(ptr) {
+        const obj = Object.create(TxInput.prototype);
+        obj.ptr = ptr;
+
+        return obj;
+    }
+
+    free() {
+        const ptr = this.ptr;
+        this.ptr = 0;
+        freeTxInput(ptr);
+    }
+
+    /**
+    * @param {TxoPointer} ptr
+    * @param {TxOut} value
+    * @returns {TxInput}
+    */
+    static new(ptr, value) {
+        return TxInput.__wrap(wasm.txinput_new(ptr.ptr, value.ptr));
+    }
+    /**
+    * @returns {any}
+    */
+    to_json() {
+        return takeObject(wasm.txinput_to_json(this.ptr));
+    }
+    /**
+    * @param {any} value
+    * @returns {TxInput}
+    */
+    static from_json(value) {
+        return TxInput.__wrap(wasm.txinput_from_json(addHeapObject(value)));
+    }
+}
+
 function freeTxOut(ptr) {
 
     wasm.__wbg_txout_free(ptr);
@@ -1927,6 +2133,14 @@ export class TxOut {
         freeTxOut(ptr);
     }
 
+    /**
+    * @param {Address} address
+    * @param {Coin} value
+    * @returns {TxOut}
+    */
+    static new(address, value) {
+        return TxOut.__wrap(wasm.txout_new(address.ptr, value.ptr));
+    }
     /**
     * serialize into a JsValue object
     * @returns {any}
@@ -1965,6 +2179,14 @@ export class TxoPointer {
         freeTxoPointer(ptr);
     }
 
+    /**
+    * @param {TransactionId} id
+    * @param {number} index
+    * @returns {TxoPointer}
+    */
+    static new(id, index) {
+        return TxoPointer.__wrap(wasm.txopointer_new(id.ptr, index));
+    }
     /**
     * serialize into a JsValue object
     * @returns {any}
@@ -2020,6 +2242,16 @@ export class Witness {
     */
     static new_redeem_key(blockchain_settings, signing_key, transaction_id) {
         return Witness.__wrap(wasm.witness_new_redeem_key(blockchain_settings.ptr, signing_key.ptr, transaction_id.ptr));
+    }
+    /**
+    * used to add signatures created by hardware wallets where we don\'t have access
+    * to the private key
+    * @param {PublicKey} key
+    * @param {TransactionSignature} signature
+    * @returns {Witness}
+    */
+    static from_external(key, signature) {
+        return Witness.__wrap(wasm.witness_from_external(key.ptr, signature.ptr));
     }
 }
 

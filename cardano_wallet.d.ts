@@ -174,6 +174,25 @@ export class Entropy {
   to_array(): any;
 }
 /**
+*/
+export class InputSelectionBuilder {
+  free(): void;
+  static first_match_first(): InputSelectionBuilder;
+  static largest_first(): InputSelectionBuilder;
+  static blackjack(dust_threshold: Coin): InputSelectionBuilder;
+  add_input(tx_input: TxInput): void;
+  add_output(output: TxOut): void;
+  select_inputs(fee_algorithm: LinearFeeAlgorithm, output_policy: OutputPolicy): InputSelectionResult;
+}
+/**
+*/
+export class InputSelectionResult {
+  free(): void;
+  is_input(txo_pointer: TxoPointer): boolean;
+  estimated_fees(): Coin;
+  estimated_change(): Coin;
+}
+/**
 * This is the linear fee algorithm used buy the current cardano blockchain.
 *
 * However it is possible the linear fee algorithm may change its settings:
@@ -326,8 +345,24 @@ export class TransactionId {
 }
 /**
 */
+export class TransactionSignature {
+  free(): void;
+  static from_hex(hex: string): TransactionSignature;
+  to_hex(): string;
+}
+/**
+*/
+export class TxInput {
+  free(): void;
+  static new(ptr: TxoPointer, value: TxOut): TxInput;
+  to_json(): any;
+  static from_json(value: any): TxInput;
+}
+/**
+*/
 export class TxOut {
   free(): void;
+  static new(address: Address, value: Coin): TxOut;
   to_json(): any;
   static from_json(value: any): TxOut;
 }
@@ -335,6 +370,7 @@ export class TxOut {
 */
 export class TxoPointer {
   free(): void;
+  static new(id: TransactionId, index: number): TxoPointer;
   to_json(): any;
   static from_json(value: any): TxoPointer;
 }
@@ -344,4 +380,5 @@ export class Witness {
   free(): void;
   static new_extended_key(blockchain_settings: BlockchainSettings, signing_key: PrivateKey, transaction_id: TransactionId): Witness;
   static new_redeem_key(blockchain_settings: BlockchainSettings, signing_key: PrivateRedeemKey, transaction_id: TransactionId): Witness;
+  static from_external(key: PublicKey, signature: TransactionSignature): Witness;
 }
