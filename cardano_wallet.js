@@ -1616,6 +1616,22 @@ export class SignedTransaction {
         return takeObject(wasm.signedtransaction_to_json(this.ptr));
     }
     /**
+    * @param {Uint8Array} bytes
+    * @returns {SignedTransaction}
+    */
+    static from_bytes(bytes) {
+        const ptr0 = passArray8ToWasm(bytes);
+        const len0 = WASM_VECTOR_LEN;
+        try {
+            return SignedTransaction.__wrap(wasm.signedtransaction_from_bytes(ptr0, len0));
+
+        } finally {
+            wasm.__wbindgen_free(ptr0, len0 * 1);
+
+        }
+
+    }
+    /**
     * @returns {string}
     */
     to_hex() {
@@ -1661,19 +1677,10 @@ export class Transaction {
     }
 
     /**
-    * @returns {string}
+    * @returns {TransactionId}
     */
     id() {
-        const retptr = globalArgumentPtr();
-        wasm.transaction_id(retptr, this.ptr);
-        const mem = getUint32Memory();
-        const rustptr = mem[retptr / 4];
-        const rustlen = mem[retptr / 4 + 1];
-
-        const realRet = getStringFromWasm(rustptr, rustlen).slice();
-        wasm.__wbindgen_free(rustptr, rustlen * 1);
-        return realRet;
-
+        return TransactionId.__wrap(wasm.transaction_id(this.ptr));
     }
     /**
     * @returns {any}
@@ -1817,6 +1824,8 @@ export class TransactionFinalized {
     *
     * The signature must be added one by one in the same order the inputs have
     * been added.
+    *
+    * Deprecated: use `add_witness` instead.
     * @param {BlockchainSettings} blockchain_settings
     * @param {PrivateKey} key
     * @returns {void}
@@ -1825,22 +1834,13 @@ export class TransactionFinalized {
         return wasm.transactionfinalized_sign(this.ptr, blockchain_settings.ptr, key.ptr);
     }
     /**
-    * @param {BlockchainSettings} blockchain_settings
-    * @param {PrivateRedeemKey} key
+    * @param {Witness} witness
     * @returns {void}
     */
-    sign_redemption(blockchain_settings, key) {
-        return wasm.transactionfinalized_sign_redemption(this.ptr, blockchain_settings.ptr, key.ptr);
-    }
-    /**
-    * used to add signatures created by hardware wallets where we don\'t have access
-    * to the private key
-    * @param {PublicKey} key
-    * @param {TransactionSignature} signature
-    * @returns {void}
-    */
-    from_external(key, signature) {
-        return wasm.transactionfinalized_from_external(this.ptr, key.ptr, signature.ptr);
+    add_witness(witness) {
+        const ptr0 = witness.ptr;
+        witness.ptr = 0;
+        return wasm.transactionfinalized_add_witness(this.ptr, ptr0);
     }
     /**
     * @returns {SignedTransaction}
@@ -1860,24 +1860,8 @@ function freeTransactionId(ptr) {
 */
 export class TransactionId {
 
-    free() {
-        const ptr = this.ptr;
-        this.ptr = 0;
-        freeTransactionId(ptr);
-    }
-
-}
-
-function freeTransactionSignature(ptr) {
-
-    wasm.__wbg_transactionsignature_free(ptr);
-}
-/**
-*/
-export class TransactionSignature {
-
     static __wrap(ptr) {
-        const obj = Object.create(TransactionSignature.prototype);
+        const obj = Object.create(TransactionId.prototype);
         obj.ptr = ptr;
 
         return obj;
@@ -1886,31 +1870,15 @@ export class TransactionSignature {
     free() {
         const ptr = this.ptr;
         this.ptr = 0;
-        freeTransactionSignature(ptr);
+        freeTransactionId(ptr);
     }
 
-    /**
-    * @param {string} hex
-    * @returns {TransactionSignature}
-    */
-    static from_hex(hex) {
-        const ptr0 = passStringToWasm(hex);
-        const len0 = WASM_VECTOR_LEN;
-        try {
-            return TransactionSignature.__wrap(wasm.transactionsignature_from_hex(ptr0, len0));
-
-        } finally {
-            wasm.__wbindgen_free(ptr0, len0 * 1);
-
-        }
-
-    }
     /**
     * @returns {string}
     */
     to_hex() {
         const retptr = globalArgumentPtr();
-        wasm.transactionsignature_to_hex(retptr, this.ptr);
+        wasm.transactionid_to_hex(retptr, this.ptr);
         const mem = getUint32Memory();
         const rustptr = mem[retptr / 4];
         const rustlen = mem[retptr / 4 + 1];
@@ -1918,6 +1886,22 @@ export class TransactionSignature {
         const realRet = getStringFromWasm(rustptr, rustlen).slice();
         wasm.__wbindgen_free(rustptr, rustlen * 1);
         return realRet;
+
+    }
+    /**
+    * @param {string} s
+    * @returns {TransactionId}
+    */
+    static from_hex(s) {
+        const ptr0 = passStringToWasm(s);
+        const len0 = WASM_VECTOR_LEN;
+        try {
+            return TransactionId.__wrap(wasm.transactionid_from_hex(ptr0, len0));
+
+        } finally {
+            wasm.__wbindgen_free(ptr0, len0 * 1);
+
+        }
 
     }
 }
@@ -1995,6 +1979,47 @@ export class TxoPointer {
     */
     static from_json(value) {
         return TxoPointer.__wrap(wasm.txopointer_from_json(addHeapObject(value)));
+    }
+}
+
+function freeWitness(ptr) {
+
+    wasm.__wbg_witness_free(ptr);
+}
+/**
+*/
+export class Witness {
+
+    static __wrap(ptr) {
+        const obj = Object.create(Witness.prototype);
+        obj.ptr = ptr;
+
+        return obj;
+    }
+
+    free() {
+        const ptr = this.ptr;
+        this.ptr = 0;
+        freeWitness(ptr);
+    }
+
+    /**
+    * @param {BlockchainSettings} blockchain_settings
+    * @param {PrivateKey} signing_key
+    * @param {TransactionId} transaction_id
+    * @returns {Witness}
+    */
+    static new_extended_key(blockchain_settings, signing_key, transaction_id) {
+        return Witness.__wrap(wasm.witness_new_extended_key(blockchain_settings.ptr, signing_key.ptr, transaction_id.ptr));
+    }
+    /**
+    * @param {BlockchainSettings} blockchain_settings
+    * @param {PrivateRedeemKey} signing_key
+    * @param {TransactionId} transaction_id
+    * @returns {Witness}
+    */
+    static new_redeem_key(blockchain_settings, signing_key, transaction_id) {
+        return Witness.__wrap(wasm.witness_new_redeem_key(blockchain_settings.ptr, signing_key.ptr, transaction_id.ptr));
     }
 }
 

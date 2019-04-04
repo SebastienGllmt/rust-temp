@@ -273,6 +273,7 @@ export class SignedTransaction {
   free(): void;
   id(): string;
   to_json(): any;
+  static from_bytes(bytes: Uint8Array): SignedTransaction;
   to_hex(): string;
 }
 /**
@@ -286,7 +287,7 @@ export class SignedTransaction {
 */
 export class Transaction {
   free(): void;
-  id(): string;
+  id(): TransactionId;
   to_json(): any;
   to_hex(): string;
 }
@@ -313,21 +314,15 @@ export class TransactionFinalized {
   free(): void;
   constructor(transaction: Transaction);
   sign(blockchain_settings: BlockchainSettings, key: PrivateKey): void;
-  sign_redemption(blockchain_settings: BlockchainSettings, key: PrivateRedeemKey): void;
-  from_external(key: PublicKey, signature: TransactionSignature): void;
+  add_witness(witness: Witness): void;
   finalize(): SignedTransaction;
 }
 /**
 */
 export class TransactionId {
   free(): void;
-}
-/**
-*/
-export class TransactionSignature {
-  free(): void;
-  static from_hex(hex: string): TransactionSignature;
   to_hex(): string;
+  static from_hex(s: string): TransactionId;
 }
 /**
 */
@@ -342,4 +337,11 @@ export class TxoPointer {
   free(): void;
   to_json(): any;
   static from_json(value: any): TxoPointer;
+}
+/**
+*/
+export class Witness {
+  free(): void;
+  static new_extended_key(blockchain_settings: BlockchainSettings, signing_key: PrivateKey, transaction_id: TransactionId): Witness;
+  static new_redeem_key(blockchain_settings: BlockchainSettings, signing_key: PrivateRedeemKey, transaction_id: TransactionId): Witness;
 }
