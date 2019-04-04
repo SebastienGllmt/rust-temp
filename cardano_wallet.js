@@ -1833,6 +1833,16 @@ export class TransactionFinalized {
         return wasm.transactionfinalized_sign_redemption(this.ptr, blockchain_settings.ptr, key.ptr);
     }
     /**
+    * used to add signatures created by hardware wallets where we don\'t have access
+    * to the private key
+    * @param {PublicKey} key
+    * @param {TransactionSignature} signature
+    * @returns {void}
+    */
+    from_external(key, signature) {
+        return wasm.transactionfinalized_from_external(this.ptr, key.ptr, signature.ptr);
+    }
+    /**
     * @returns {SignedTransaction}
     */
     finalize() {
@@ -1856,6 +1866,60 @@ export class TransactionId {
         freeTransactionId(ptr);
     }
 
+}
+
+function freeTransactionSignature(ptr) {
+
+    wasm.__wbg_transactionsignature_free(ptr);
+}
+/**
+*/
+export class TransactionSignature {
+
+    static __wrap(ptr) {
+        const obj = Object.create(TransactionSignature.prototype);
+        obj.ptr = ptr;
+
+        return obj;
+    }
+
+    free() {
+        const ptr = this.ptr;
+        this.ptr = 0;
+        freeTransactionSignature(ptr);
+    }
+
+    /**
+    * @param {string} hex
+    * @returns {TransactionSignature}
+    */
+    static from_hex(hex) {
+        const ptr0 = passStringToWasm(hex);
+        const len0 = WASM_VECTOR_LEN;
+        try {
+            return TransactionSignature.__wrap(wasm.transactionsignature_from_hex(ptr0, len0));
+
+        } finally {
+            wasm.__wbindgen_free(ptr0, len0 * 1);
+
+        }
+
+    }
+    /**
+    * @returns {string}
+    */
+    to_hex() {
+        const retptr = globalArgumentPtr();
+        wasm.transactionsignature_to_hex(retptr, this.ptr);
+        const mem = getUint32Memory();
+        const rustptr = mem[retptr / 4];
+        const rustlen = mem[retptr / 4 + 1];
+
+        const realRet = getStringFromWasm(rustptr, rustlen).slice();
+        wasm.__wbindgen_free(rustptr, rustlen * 1);
+        return realRet;
+
+    }
 }
 
 function freeTxOut(ptr) {

@@ -314,12 +314,20 @@ export class TransactionFinalized {
   constructor(transaction: Transaction);
   sign(blockchain_settings: BlockchainSettings, key: PrivateKey): void;
   sign_redemption(blockchain_settings: BlockchainSettings, key: PrivateRedeemKey): void;
+  from_external(key: PublicKey, signature: TransactionSignature): void;
   finalize(): SignedTransaction;
 }
 /**
 */
 export class TransactionId {
   free(): void;
+}
+/**
+*/
+export class TransactionSignature {
+  free(): void;
+  static from_hex(hex: string): TransactionSignature;
+  to_hex(): string;
 }
 /**
 */
