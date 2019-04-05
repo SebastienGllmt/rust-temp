@@ -1927,6 +1927,12 @@ export class TransactionFinalized {
         this.ptr = wasm.transactionfinalized_new(ptr0);
     }
     /**
+    * @returns {TransactionId}
+    */
+    id() {
+        return TransactionId.__wrap(wasm.transactionfinalized_id(this.ptr));
+    }
+    /**
     * sign the inputs of the transaction (i.e. unlock the funds the input are
     * referring to).
     *

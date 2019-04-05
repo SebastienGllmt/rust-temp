@@ -332,6 +332,7 @@ export class TransactionBuilder {
 export class TransactionFinalized {
   free(): void;
   constructor(transaction: Transaction);
+  id(): TransactionId;
   sign(blockchain_settings: BlockchainSettings, key: PrivateKey): void;
   add_witness(witness: Witness): void;
   finalize(): SignedTransaction;

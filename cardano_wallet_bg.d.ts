@@ -115,6 +115,7 @@ export function witness_new_redeem_key(a: number, b: number, c: number): number;
 export function witness_from_external(a: number, b: number): number;
 export function __wbg_transactionfinalized_free(a: number): void;
 export function transactionfinalized_new(a: number): number;
+export function transactionfinalized_id(a: number): number;
 export function transactionfinalized_sign(a: number, b: number, c: number): void;
 export function transactionfinalized_add_witness(a: number, b: number): void;
 export function transactionfinalized_finalize(a: number): number;
